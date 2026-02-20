@@ -6,6 +6,7 @@ import { registerSchema } from "@/lib/validators";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
 import api from "@/lib/axios";
+import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -109,6 +110,15 @@ export default function RegisterPage() {
               {isSubmitting ? "Creating account..." : "Register"}
             </Button>
           </form>
+          <p className="text-sm text-center text-gray-300 mt-4">
+            Already have an account?{" "}
+            <Link
+              href="/login"
+              className="text-indigo-400 hover:underline"
+            >
+              Login
+            </Link>
+          </p>
         </CardContent>
       </Card>
     </div>

@@ -7,6 +7,7 @@ import { z } from "zod";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/auth.store";
 import api from "@/lib/axios";
+import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -99,6 +100,12 @@ export default function LoginPage() {
               {isSubmitting ? "Logging in..." : "Login"}
             </Button>
           </form>
+          <p className="text-center text-sm text-white/70 mt-4">
+            Don&apos;t have an account?{" "}
+            <Link href="/register" className="text-indigo-400 hover:underline">
+              Register
+            </Link>
+          </p>
         </CardContent>
       </Card>
     </div>
