@@ -9,6 +9,7 @@ import { useCallback } from "react";
 
 
 import { Button } from "@/components/ui/button";
+import DashboardStats from "@/components/ui/dashboard-stats";
 import {
   Dialog,
   DialogContent,
@@ -34,6 +35,7 @@ export default function DashboardPage() {
 
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
+  const [completedCount, setCompletedCount] = useState(0);
   const [statusFilter, setStatusFilter] = useState<string | null>(null);
   const [search, setSearch] = useState("");
 
@@ -52,6 +54,16 @@ export default function DashboardPage() {
 
       setTasks(data.tasks);
       setTotal(data.total);
+      // compute completed count by fetching a larger page to include most tasks
+      try {
+        const all = await taskService.getTasks({ page: 1, limit: 1000 });
+        const completed = (all.tasks || []).filter(
+          (t) => t.status === "COMPLETED"
+        ).length;
+        setCompletedCount(completed);
+      } catch {
+        setCompletedCount(0);
+      }
     } catch {
       toast({
         title: "Failed to fetch tasks",
@@ -185,6 +197,13 @@ export default function DashboardPage() {
             </Button>
           </div>
         </div>
+
+        {/* Stats */}
+        <DashboardStats
+          total={total}
+          completed={completedCount}
+          pending={Math.max(0, total - completedCount)}
+        />
 
         {/* Search + Filter */}
         <div className="flex gap-4 mb-6">
