@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Toaster } from "@/components/ui/toaster";
+import Footer from "@/components/ui/footer";
 import localFont from "next/font/local";
 import "./globals.css";
 
@@ -29,7 +30,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-800 text-white">
+          <main>{children}</main>
+        </div>
+        <Footer />
         <Toaster />
       </body>
     </html>
