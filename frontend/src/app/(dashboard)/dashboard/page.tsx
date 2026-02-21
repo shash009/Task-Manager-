@@ -58,7 +58,7 @@ export default function DashboardPage() {
       try {
         const all = await taskService.getTasks({ page: 1, limit: 1000 });
         const completed = (all.tasks || []).filter(
-          (t) => t.status === "COMPLETED"
+          (t: Task) => t.status === "COMPLETED"
         ).length;
         setCompletedCount(completed);
       } catch {

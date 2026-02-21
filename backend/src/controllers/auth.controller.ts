@@ -30,6 +30,11 @@ export const register = async (req: Request, res: Response) => {
     const accessToken = generateAccessToken(user.id);
     const refreshToken = generateRefreshToken(user.id);
 
+    // Delete any old refresh tokens (cleanup before creating new one)
+    await prisma.refreshToken.deleteMany({
+      where: { userId: user.id },
+    });
+
     await prisma.refreshToken.create({
       data: {
         token: refreshToken,
@@ -71,6 +76,11 @@ export const login = async (req: Request, res: Response) => {
     const accessToken = generateAccessToken(user.id);
     const refreshToken = generateRefreshToken(user.id);
 
+    // Delete old refresh tokens for this user
+    await prisma.refreshToken.deleteMany({
+      where: { userId: user.id },
+    });
+
     await prisma.refreshToken.create({
       data: {
         token: refreshToken,
@@ -86,7 +96,8 @@ export const login = async (req: Request, res: Response) => {
 
     res.json({ accessToken });
   } catch (error) {
-    res.status(500).json({ message: "Server error" });
+    console.error("LOGIN ERROR:", error);
+    res.status(500).json({ message: "Server error", error: (error instanceof Error) ? error.message : "Unknown error" });
   }
 };
 
